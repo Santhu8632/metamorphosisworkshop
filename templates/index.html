@@ -1,0 +1,528 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Empowering Students with Essential Skills{% endblock %}
+
+{% block extra_css %}
+<style>
+    .feature-card {
+        background: white;
+        border-radius: 20px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .feature-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(90deg, var(--secondary-color), var(--accent-color));
+        transform: scaleX(0);
+        transition: transform 0.4s ease;
+    }
+
+    .feature-card:hover::before {
+        transform: scaleX(1);
+    }
+
+    .feature-card:hover {
+        transform: translateY(-15px) scale(1.02);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    }
+
+    .feature-icon {
+        font-size: 3rem;
+        margin-bottom: 1.5rem;
+        color: var(--secondary-color);
+        transition: all 0.3s ease;
+    }
+
+    .feature-card:hover .feature-icon {
+        transform: scale(1.2) rotate(5deg);
+        color: var(--accent-color);
+    }
+
+    .testimonial-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 20px;
+        padding: 2rem;
+        margin: 1rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .testimonial-card::before {
+        content: '"';
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        font-size: 6rem;
+        color: rgba(255,255,255,0.1);
+        font-family: Georgia, serif;
+    }
+
+    .testimonial-author {
+        display: flex;
+        align-items: center;
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .author-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        margin-right: 1rem;
+        border: 3px solid white;
+    }
+
+    .cta-section {
+        background: linear-gradient(rgba(44, 62, 80, 0.9), rgba(44, 62, 80, 0.9)), 
+                    url("{{ url_for('static', filename='images/cta-bg.jpg') }}");
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        color: white;
+        padding: 100px 0;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .cta-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url("{{ url_for('static', filename='gifs/animated-bg.gif') }}");
+        opacity: 0.1;
+        animation: pulse 20s infinite linear;
+    }
+
+    .cta-content {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+    }
+
+    .partners-section {
+        padding: 60px 0;
+        background: white;
+    }
+
+    .partner-logo {
+        height: 80px;
+        filter: grayscale(100%);
+        opacity: 0.6;
+        transition: all 0.3s ease;
+    }
+
+    .partner-logo:hover {
+        filter: grayscale(0%);
+        opacity: 1;
+        transform: scale(1.1);
+    }
+
+    .newsletter-section {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 60px 0;
+        border-radius: 30px;
+        margin: 60px auto;
+        max-width: 90%;
+        box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+    }
+
+    .newsletter-form .form-control {
+        background: rgba(255,255,255,0.9);
+        border: none;
+        padding: 15px 25px;
+        border-radius: 50px;
+        font-size: 1.1rem;
+    }
+
+    .newsletter-form .btn {
+        border-radius: 50px;
+        padding: 15px 30px;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="hero-content">
+            <h1 class="hero-title animate-up">Empowering Students with<br>Essential Life & Workplace Skills</h1>
+            <p class="hero-subtitle animate-up animate-delay-1">A practical soft skills and life skills training program designed for college students to build confidence, clarity, and career readiness.</p>
+            
+            <div class="hero-buttons animate-up animate-delay-2">
+                <a href="/contact" class="btn btn-primary btn-lg me-3 mb-3">
+                    <i class="fas fa-calendar-check me-2"></i> Enquire for Campus Training
+                </a>
+                <a href="#programs" class="btn btn-outline-light btn-lg mb-3">
+                    <i class="fas fa-play-circle me-2"></i> Watch Program Overview
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Animated Butterfly -->
+    <div class="butterfly-animation d-none d-lg-block">
+        <img src="{{ url_for('static', filename='gifs/3d-butterfly.gif') }}" alt="Butterfly Animation" style="width: 100%; height: 100%;">
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="stats-section">
+    <div class="container">
+        <h2 class="text-center mb-5">Our Impact in Numbers</h2>
+        <div class="row">
+            {% for stat in stats %}
+            <div class="col-md-4 col-lg-2 mb-4">
+                <div class="stat-card">
+                    <div class="stat-icon" style="color: {{ stat.color }}">
+                        <i class="fas {{ stat.icon }}"></i>
+                    </div>
+                    <div class="stat-value">{{ stat.value }}</div>
+                    <div class="stat-name">{{ stat.name }}</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Why Program Section -->
+<section class="py-5" id="why-program">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-5 mb-lg-0">
+                <h2 class="section-title">Why This Program?</h2>
+                <p class="lead mb-4">
+                    Today's students are academically qualified, but many struggle with communication, 
+                    confidence, decision-making, and workplace readiness. Our program bridges this gap 
+                    by equipping students with real-world skills that matter beyond the classroom.
+                </p>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <ul class="list-unstyled">
+                            <li class="mb-3">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <strong>Interactive Sessions</strong>
+                            </li>
+                            <li class="mb-3">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <strong>Practical Learning</strong>
+                            </li>
+                            <li class="mb-3">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <strong>Expert Trainers</strong>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="list-unstyled">
+                            <li class="mb-3">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <strong>Career Focused</strong>
+                            </li>
+                            <li class="mb-3">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <strong>Real-world Scenarios</strong>
+                            </li>
+                            <li class="mb-3">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <strong>Measurable Outcomes</strong>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <a href="/methodology" class="btn btn-primary mt-4">
+                    <i class="fas fa-play me-2"></i> Learn About Our Methodology
+                </a>
+            </div>
+            
+            <div class="col-lg-6">
+                <div class="position-relative">
+                    <img src="{{ url_for('static', filename='images/hero-bg.jpg') }}" 
+                         alt="Student Training" 
+                         class="img-fluid rounded shadow-lg"
+                         style="border-radius: 20px;">
+                    
+                    <!-- Floating Element -->
+                    <div class="position-absolute top-0 start-0 translate-middle bg-warning text-white rounded-circle d-flex align-items-center justify-content-center"
+                         style="width: 80px; height: 80px; animation: bounce 2s infinite;">
+                        <i class="fas fa-graduation-cap fa-2x"></i>
+                    </div>
+                    
+                    <!-- Floating Element 2 -->
+                    <div class="position-absolute bottom-0 end-0 translate-middle bg-success text-white rounded-circle d-flex align-items-center justify-content-center"
+                         style="width: 60px; height: 60px; animation: pulse 2s infinite;">
+                        <i class="fas fa-chart-line fa-lg"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Programs -->
+<section class="py-5 bg-light" id="programs">
+    <div class="container">
+        <h2 class="text-center mb-5">Featured Programs</h2>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h4>Communication Mastery</h4>
+                    <p>Develop confident communication skills for interviews, presentations, and workplace interactions.</p>
+                    <a href="/programs#communication" class="btn btn-outline-primary mt-3">Learn More</a>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <h4>Workplace Readiness</h4>
+                    <p>Prepare for corporate life with essential workplace skills, etiquette, and professional behavior.</p>
+                    <a href="/programs#workplace" class="btn btn-outline-primary mt-3">Learn More</a>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h4>Mindset Development</h4>
+                    <p>Cultivate growth mindset, resilience, and positive attitude for personal and professional success.</p>
+                    <a href="/programs#mindset" class="btn btn-outline-primary mt-3">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Videos -->
+{% if featured_videos %}
+<section class="video-gallery">
+    <div class="container">
+        <h2 class="text-center mb-5">Featured Training Videos</h2>
+        <div class="row">
+            {% for video in featured_videos %}
+            <div class="col-md-4 mb-4">
+                <div class="video-card" 
+                     data-video-src="{{ url_for('serve_video', filename=video.filename) }}"
+                     data-video-title="{{ video.title }}">
+                    <div class="video-thumbnail">
+                        <div class="play-button">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div class="video-info p-3">
+                        <h5 class="mb-2">{{ video.title }}</h5>
+                        <p class="small mb-0">{{ video.description[:100] }}...</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-4">
+            <a href="/videos" class="btn btn-light">
+                <i class="fas fa-video me-2"></i> View All Videos
+            </a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Founder Section -->
+<section class="founder-section py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Meet Our Founder</h2>
+        <div class="founder-card">
+            <div class="row align-items-center">
+                <div class="col-lg-4">
+                    <div class="founder-photo-container">
+                        <img src="{{ url_for('static', filename='images/founder.jpg') }}" 
+                             alt="Gaius Titus - Founder" 
+                             class="founder-photo">
+                        <div class="founder-frame"></div>
+                        <div class="founder-badge">Founder & CEO</div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-8 p-4">
+                    <h3 class="mb-3">Gaius Titus</h3>
+                    <h5 class="text-primary mb-4">Soft Skills Trainer & Career Coach</h5>
+                    
+                    <p class="mb-4">
+                        With over 15 years of experience in corporate training and student mentorship, 
+                        Gaius Titus has dedicated his career to empowering the next generation of professionals. 
+                        His passion for personal development and proven track record of transforming student 
+                        capabilities make him the ideal guide for your career journey.
+                    </p>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="mb-2">
+                                <i class="fas fa-phone text-primary me-2"></i>
+                                <strong>Phone:</strong> +91 9916977789
+                            </p>
+                            <p class="mb-2">
+                                <i class="fas fa-envelope text-primary me-2"></i>
+                                <strong>Email:</strong> g4yahweh@gmail.com
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="mb-2">
+                                <i class="fas fa-map-marker-alt text-primary me-2"></i>
+                                <strong>Location:</strong> Bangalore, India
+                            </p>
+                            <p class="mb-2">
+                                <i class="fas fa-award text-primary me-2"></i>
+                                <strong>Specialization:</strong> Soft Skills & Career Development
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <a href="/contact" class="btn btn-primary me-3">
+                            <i class="fas fa-calendar me-2"></i> Schedule a Session
+                        </a>
+                        <a href="/about" class="btn btn-outline-primary">
+                            <i class="fas fa-user me-2"></i> Full Profile
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-5">What Students Say</h2>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="testimonial-card">
+                    <p class="mb-4">
+                        "The communication skills workshop transformed how I present myself in interviews. 
+                        I landed 3 job offers within a month of completing the program!"
+                    </p>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/women/32.jpg" 
+                             alt="Student" 
+                             class="author-avatar">
+                        <div>
+                            <h6 class="mb-0">Priya Sharma</h6>
+                            <small class="text-light">Engineering Graduate</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="testimonial-card">
+                    <p class="mb-4">
+                        "The personality development module helped me overcome my stage fear. 
+                        I can now confidently present to large audiences without hesitation."
+                    </p>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/men/54.jpg" 
+                             alt="Student" 
+                             class="author-avatar">
+                        <div>
+                            <h6 class="mb-0">Rahul Verma</h6>
+                            <small class="text-light">MBA Student</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="testimonial-card">
+                    <p class="mb-4">
+                        "Workplace readiness training prepared me for corporate culture. 
+                        My manager complimented my professional approach in the first month itself!"
+                    </p>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/women/67.jpg" 
+                             alt="Student" 
+                             class="author-avatar">
+                        <div>
+                            <h6 class="mb-0">Anjali Patel</h6>
+                            <small class="text-light">Software Developer</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+    <div class="container">
+        <div class="cta-content">
+            <h2 class="mb-4">Ready to Transform Your Students?</h2>
+            <p class="lead mb-5">Join hundreds of colleges that have empowered their students with essential life skills.</p>
+            
+            <div class="d-flex flex-wrap justify-content-center gap-3">
+                <a href="/contact" class="btn btn-primary btn-lg">
+                    <i class="fas fa-calendar-alt me-2"></i> Schedule Campus Training
+                </a>
+                <a href="tel:+919916977789" class="btn btn-light btn-lg">
+                    <i class="fas fa-phone me-2"></i> Call Now: +91 9916977789
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Newsletter -->
+<section class="newsletter-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <h3 class="mb-3">Stay Updated</h3>
+                <p class="mb-0">Get the latest training updates, workshop schedules, and career tips directly in your inbox.</p>
+            </div>
+            
+            <div class="col-lg-6">
+                <form class="newsletter-form">
+                    <div class="input-group">
+                        <input type="email" 
+                               class="form-control" 
+                               placeholder="Enter your email address" 
+                               required>
+                        <button class="btn btn-light" type="submit">
+                            Subscribe <i class="fas fa-paper-plane ms-2"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

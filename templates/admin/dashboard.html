@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - Metamorphosis Workshop{% endblock %}
+
+{% block extra_css %}
+<style>
+    .dashboard-card {
+        border-radius: 10px;
+        transition: all 0.3s;
+    }
+    
+    .stat-card {
+        color: white;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+    }
+    
+    .stat-card-1 { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+    .stat-card-2 { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+    .stat-card-3 { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+    
+    .badge-new { background-color: #dc3545; }
+    .badge-contacted { background-color: #ffc107; color: #000; }
+    .badge-completed { background-color: #198754; }
+    
+    .table-responsive {
+        max-height: 500px;
+        overflow-y: auto;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Stats -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="stat-card stat-card-1">
+                <h3>{{ stats.total_enquiries }}</h3>
+                <p>Total Enquiries</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card stat-card-2">
+                <h3>{{ stats.new_enquiries }}</h3>
+                <p>New Enquiries</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card stat-card-3">
+                <h3>{{ stats.total_videos }}</h3>
+                <p>Training Videos</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Left Column: Enquiries -->
+        <div class="col-lg-8 mb-4">
+            <div class="card dashboard-card">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-inbox me-2"></i>Recent Enquiries</h5>
+                    <span class="badge bg-light text-primary">{{ enquiries|length }} total</span>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Name</th>
+                                    <th>Contact</th>
+                                    <th>College</th>
+                                    <th>Program</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for enquiry in enquiries %}
+                                <tr>
+                                    <td>{{ enquiry.created_at.strftime('%d/%m/%y') }}</td>
+                                    <td>{{ enquiry.name }}</td>
+                                    <td>
+                                        <div>{{ enquiry.email }}</div>
+                                        <small>{{ enquiry.phone }}</small>
+                                    </td>
+                                    <td>{{ enquiry.college[:20] }}{% if enquiry.college|length > 20 %}...{% endif %}</td>
+                                    <td>{{ enquiry.program[:15] }}{% if enquiry.program|length > 15 %}...{% endif %}</td>
+                                    <td>
+                                        <form method="POST" action="{{ url_for('update_enquiry_status', id=enquiry.id) }}" class="d-inline">
+                                            <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
+                                                <option value="New" {% if enquiry.status == 'New' %}selected{% endif %}>New</option>
+                                                <option value="Contacted" {% if enquiry.status == 'Contacted' %}selected{% endif %}>Contacted</option>
+                                                <option value="Completed" {% if enquiry.status == 'Completed' %}selected{% endif %}>Completed</option>
+                                            </select>
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#messageModal{{ enquiry.id }}">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <form method="POST" action="{{ url_for('delete_enquiry', id=enquiry.id) }}" class="d-inline" onsubmit="return confirm('Delete this enquiry?');">
+                                            <button type="submit" class="btn btn-sm btn-danger">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                
+                                <!-- Message Modal -->
+                                <div class="modal fade" id="messageModal{{ enquiry.id }}" tabindex="-1">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Enquiry Details</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p><strong>Name:</strong> {{ enquiry.name }}</p>
+                                                <p><strong>Email:</strong> {{ enquiry.email }}</p>
+                                                <p><strong>Phone:</strong> {{ enquiry.phone }}</p>
+                                                <p><strong>College:</strong> {{ enquiry.college }}</p>
+                                                <p><strong>Program:</strong> {{ enquiry.program }}</p>
+                                                <p><strong>Date:</strong> {{ enquiry.created_at.strftime('%d %B, %Y %I:%M %p') }}</p>
+                                                <hr>
+                                                <p><strong>Message:</strong></p>
+                                                <p>{{ enquiry.message }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Video Management -->
+        <div class="col-lg-4">
+            <!-- Video Upload -->
+            <div class="card dashboard-card mb-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="fas fa-upload me-2"></i>Upload Training Video</h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="/admin/video/upload" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label class="form-label">Video Title</label>
+                            <input type="text" name="title" class="form-control" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea name="description" class="form-control" rows="3"></textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Video File (MP4, MOV, AVI, WMV)</label>
+                            <input type="file" name="video" class="form-control" accept="video/*" required>
+                            <small class="text-muted">Max file size: 100MB</small>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-success w-100">
+                            <i class="fas fa-upload me-2"></i>Upload Video
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Video List -->
+            <div class="card dashboard-card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="fas fa-video me-2"></i>Uploaded Videos ({{ videos|length }})</h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group">
+                        {% for video in videos %}
+                        <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <h6 class="mb-1">{{ video.title }}</h6>
+                                    <small class="text-muted">{{ video.upload_date.strftime('%d %b %Y') }}</small>
+                                </div>
+                                <form method="POST" action="{{ url_for('delete_video', id=video.id) }}" onsubmit="return confirm('Delete this video?');">
+                                    <button type="submit" class="btn btn-sm btn-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="text-center py-3">
+                            <i class="fas fa-video-slash fa-2x text-muted mb-2"></i>
+                            <p class="text-muted mb-0">No videos uploaded</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

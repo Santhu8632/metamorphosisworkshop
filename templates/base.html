@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Metamorphosis Workshop - Empowering Students{% endblock %}</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animations.css') }}">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    
+    {% block extra_css %}{% endblock %}
+    
+    <style>
+        /* Additional inline styles */
+        .floating-admin-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            animation: bounce 2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Admin Button (Visible to all users) -->
+    <a href="/admin/login" class="floating-admin-btn btn btn-warning btn-lg shadow-lg">
+        <i class="fas fa-lock me-2"></i>Admin
+    </a>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-butterfly fa-spin"></i>
+                <span class="ms-2">Metamorphosis <span class="text-primary">Workshop</span></span>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/programs">Programs</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/methodology">Methodology</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/outcomes">Outcomes</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/videos">Videos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
+                    
+                    <!-- Admin Login Button in Nav -->
+                    <li class="nav-item">
+                        <a href="/admin/login" class="nav-link admin-login-btn">
+                            <i class="fas fa-sign-in-alt me-1"></i> Admin Login
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Flash Messages -->
+    <div class="flash-messages">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show m-3">
+                        <div class="container">
+                            <i class="fas fa-{% if category == 'success' %}check-circle{% else %}exclamation-circle{% endif %} me-2"></i>
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h3 class="mb-3">
+                        <i class="fas fa-butterfly me-2"></i>
+                        Metamorphosis Workshop
+                    </h3>
+                    <p class="mb-3">Empowering Students with Essential Life & Workplace Skills through practical training and mentorship.</p>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 mb-4">
+                    <h5 class="mb-3">Quick Links</h5>
+                    <div class="footer-links">
+                        <a href="/programs">Programs & Modules</a>
+                        <a href="/methodology">Training Methodology</a>
+                        <a href="/videos">Video Gallery</a>
+                        <a href="/about">About Founder</a>
+                        <a href="/contact">Request Demo</a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 mb-4">
+                    <h5 class="mb-3">Contact Info</h5>
+                    <div class="contact-info">
+                        <p class="mb-2">
+                            <i class="fas fa-envelope me-2"></i>
+                            g4yahweh@gmail.com
+                        </p>
+                        <p class="mb-2">
+                            <i class="fas fa-phone me-2"></i>
+                            +91 9916977789 (Gaius Titus)
+                        </p>
+                        <p class="mb-2">
+                            <i class="fas fa-map-marker-alt me-2"></i>
+                            No. 186, 68th cross 11th Main<br>
+                            5th Block Rajajinagar, Bangalore - 560010
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <hr class="my-4" style="border-color: rgba(255,255,255,0.1);">
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-0">&copy; 2024 Metamorphosis Workshop. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="mb-0">
+                        Designed with <i class="fas fa-heart text-danger"></i> for Student Empowerment
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/particles.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

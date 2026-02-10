@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+
+{% block title %}Contact - Metamorphosis Workshop{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <h2 class="section-title">Get in Touch</h2>
+        <p class="lead text-center mb-5">If you are a college, training coordinator, or placement officer, we would love to collaborate.</p>
+        
+        <div class="row">
+            <!-- Contact Form -->
+            <div class="col-lg-8 mb-5 mb-lg-0">
+                <div class="card">
+                    <div class="card-body p-4">
+                        <h3 class="mb-4">Send Enquiry</h3>
+                        <form method="POST" action="/contact">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="name" class="form-label">Full Name *</label>
+                                    <input type="text" class="form-control" id="name" name="name" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="email" class="form-label">Email Address *</label>
+                                    <input type="email" class="form-control" id="email" name="email" required>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="phone" class="form-label">Phone Number *</label>
+                                    <input type="tel" class="form-control" id="phone" name="phone" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="college" class="form-label">College/Organization</label>
+                                    <input type="text" class="form-control" id="college" name="college">
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="program" class="form-label">Program Interested In</label>
+                                <select class="form-select" id="program" name="program">
+                                    <option value="">Select a program</option>
+                                    <option value="Communication Skills">Communication Skills</option>
+                                    <option value="Personality Development">Personality Development</option>
+                                    <option value="Attitude & Mindset">Attitude & Mindset</option>
+                                    <option value="Life Skills">Life Skills</option>
+                                    <option value="Workplace Readiness">Workplace Readiness</option>
+                                    <option value="Complete Package">Complete Package</option>
+                                    <option value="Custom Program">Custom Program</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="message" class="form-label">Message / Requirements</label>
+                                <textarea class="form-control" id="message" name="message" rows="4"></textarea>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-paper-plane me-2"></i>Send Enquiry
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contact Info -->
+            <div class="col-lg-4">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4 class="card-title mb-4">Contact Information</h4>
+                        
+                        <div class="d-flex mb-4">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-envelope fa-lg text-primary"></i>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h6>Email</h6>
+                                <p class="mb-0">g4yahweh@gmail.com</p>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex mb-4">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-phone fa-lg text-primary"></i>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h6>Phone</h6>
+                                <p class="mb-0">+91 9916977789</p>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex mb-4">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-user fa-lg text-primary"></i>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h6>Founder/Owner</h6>
+                                <p class="mb-0">Gaius Titus</p>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-map-marker-alt fa-lg text-primary"></i>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h6>Address</h6>
+                                <p class="mb-0">
+                                    No. 186, 68th cross<br>
+                                    11th Main 5th Block<br>
+                                    Rajajinagar, Bangalore - 560010<br>
+                                    Karnataka, India
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Quick Response</h5>
+                        <p class="card-text">
+                            We typically respond within 24 hours during working days. For urgent enquiries, 
+                            please call directly.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
