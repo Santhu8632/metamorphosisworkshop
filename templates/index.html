@@ -184,27 +184,6 @@
         <img src="{{ url_for('static', filename='gifs/3d-butterfly.gif') }}" alt="Butterfly Animation" style="width: 100%; height: 100%;">
     </div>
 </section>
-
-<!-- Stats Section -->
-<section class="stats-section">
-    <div class="container">
-        <h2 class="text-center mb-5">Our Impact in Numbers</h2>
-        <div class="row">
-            {% for stat in stats %}
-            <div class="col-md-4 col-lg-2 mb-4">
-                <div class="stat-card">
-                    <div class="stat-icon" style="color: {{ stat.color }}">
-                        <i class="fas {{ stat.icon }}"></i>
-                    </div>
-                    <div class="stat-value">{{ stat.value }}</div>
-                    <div class="stat-name">{{ stat.name }}</div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-</section>
-
 <!-- Why Program Section -->
 <section class="py-5" id="why-program">
     <div class="container">
